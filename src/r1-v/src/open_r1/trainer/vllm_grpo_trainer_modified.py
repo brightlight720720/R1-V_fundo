@@ -150,7 +150,10 @@ class Qwen2VLGRPOVLLMTrainerModified(Trainer):
                     model, **model_init_kwargs
                 )
             else:
-                model = AutoModelForCausalLM.from_pretrained(model, **model_init_kwargs)
+                #model = AutoModelForCausalLM.from_pretrained(model, **model_init_kwargs)
+                model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                    model, **model_init_kwargs
+                )
         else:
             model_id = model.config._name_or_path
             if args.model_init_kwargs is not None:
@@ -177,7 +180,8 @@ class Qwen2VLGRPOVLLMTrainerModified(Trainer):
                     model_id, **model_init_kwargs
                 )
             else:
-                self.ref_model = AutoModelForCausalLM.from_pretrained(
+                self.ref_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                #self.ref_model = AutoModelForCausalLM.from_pretrained(
                     model_id, **model_init_kwargs
                 )
         elif peft_config is None:
