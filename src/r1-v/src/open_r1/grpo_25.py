@@ -105,7 +105,7 @@ def format_reward(completions, **kwargs):
     pattern = r"<think>.*?</think>\s*<answer>.*?</answer>"
     completion_contents = [completion[0]["content"] for completion in completions]
     matches = [re.fullmatch(pattern, content, re.DOTALL) for content in completion_contents]
-    return [1.0 if match else 0.0 for match in matches]
+    return [ 0.3 if match else 0.0 for match in matches]
 
 def reasoning_steps_reward(completions, **kwargs):
     r"""Reward function that checks for clear step-by-step reasoning.
@@ -116,12 +116,12 @@ def reasoning_steps_reward(completions, **kwargs):
         \n\* - matches bullet points with asterisks
         First,|Second,|Next,|Finally, - matches transition words
     """
-    pattern = r"(Step \d+:|^\d+\.|\n-|\n\*|First,|Second,|Next,|Finally,|observe,|think,|Therefore,|thus,|However)"
+    pattern = r"(Step \d+:|^\d+\.|\n-|\n\*|First,|Second,|Next,|Finally,|observe,|think,|thought,|However)"
     completion_contents = [completion[0]["content"] for completion in completions]
     matches = [len(re.findall(pattern, content)) for content in completion_contents]
 
     # Magic number 3 to encourage 3 steps and more, otherwise partial reward
-    return [min(1.0, count / 3) for count in matches]
+    return [min(0.5, count / 5) for count in matches]
 
 def weighted_reward(completions, solution, **kwargs):
     acc = accuracy_reward(completions, solution, **kwargs)
@@ -177,8 +177,8 @@ Please ensure you adhere strictly to this format and that your final answer is o
 
 def main(script_args, training_args, model_args):
     # Get reward functions
-    #reward_funcs = [reward_funcs_registry[func] for func in script_args.reward_funcs]
-    reward_funcs = [weighted_reward]
+    reward_funcs = [reward_funcs_registry[func] for func in script_args.reward_funcs]
+    #reward_funcs = [weighted_reward]
 
     # Load the dataset
     dataset = load_dataset(script_args.dataset_name, name=script_args.dataset_config)
