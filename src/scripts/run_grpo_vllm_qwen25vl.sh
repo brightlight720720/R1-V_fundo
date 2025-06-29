@@ -39,31 +39,35 @@ CUDA_VISIBLE_DEVICES="0,1,2,3" torchrun \
     --output_dir ${OUTPUT_DIR} \
     --model_name_or_path ${QWEN_PATH} \
     --dataset_name ${HF_DATASET} \
+    --push_to_hub true \
+    --hub_model_id Leeyuyu/Qwen2.5-GRPO-fundo \
+    --hub_strategy every_save \
     --max_prompt_length 4096 \
-    --max_completion_length 2048 \
-    --learning_rate 5e-7 \
+    --max_completion_length 512 \
+    --learning_rate 1e-6 \
     --lr_scheduler_type cosine \
-    --warmup_steps 60 \
+    --warmup_steps 100 \
     --weight_decay 0.03 \
     --logging_steps 1 \
     --gradient_checkpointing true \
     --attn_implementation flash_attention_2 \
     --max_steps 2000 \
-    --gradient_accumulation_steps 8 \
+    --gradient_accumulation_steps 32 \
     --per_device_train_batch_size 2 \
     --bf16 true \
     --attn_implementation flash_attention_2 \
     --min_pixels 3136 \
     --max_pixels 501760 \
     --num_train_epochs 2 \
+    --max_grad_norm 1.0 \
     --run_name ${RUN_NAME} \
     --save_steps 200 \
-    --save_total_limit 3 \
+    --save_total_limit 2 \
     --report_to wandb \
-    --temperature 1.0 \
+    --temperature 0.7 \
     --num_generations 4 \
     --vllm_device "cuda:3" \
-    --vllm_gpu_memory_utilization 0.8 \
+    --vllm_gpu_memory_utilization 0.85 \
     --deepspeed ${DS_CONFIG} \
     2>&1 | tee "${OUTPUT_DIR}/training_log.txt"
 
