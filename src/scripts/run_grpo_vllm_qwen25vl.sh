@@ -12,6 +12,7 @@ export DEBUG_MODE="true"
 export LOG_PATH="./vllm_run.txt"
 
 QWEN_PATH="/workspace/models/Qwen2.5-VL-3B-Instruct"
+#QWEN_PATH="/workspace/outputs/grpo_run"
 HF_DATASET="Leeyuyu/fundo_400"
 OUTPUT_DIR="/workspace/outputs/grpo_run"
 if [ ! -d "$OUTPUT_DIR" ]; then
