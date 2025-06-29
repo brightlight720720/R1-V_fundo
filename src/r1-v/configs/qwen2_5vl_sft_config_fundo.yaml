@@ -4,7 +4,7 @@ model_revision: main
 torch_dtype: bfloat16
 
 # Data training arguments
-dataset_name: Leeyuyu/fundo_SFT
+dataset_name: Leeyuyu/fundo_SFT_nothink
 dataset_configs:
 - all
 preprocessing_num_workers: 4
@@ -17,7 +17,7 @@ gradient_accumulation_steps: 16
 gradient_checkpointing: true
 gradient_checkpointing_kwargs:
   use_reentrant: false
-hub_model_id: Qwen2.5-VL-3B-Instruct-SFT-fundo
+hub_model_id: Qwen2.5-VL-3B-Instruct-SFT-fundo-nothink
 hub_strategy: every_save
 learning_rate: 2.0e-05
 log_level: info
