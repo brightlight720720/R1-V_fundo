@@ -86,8 +86,19 @@ def accuracy_reward(completions, solution, **kwargs):
                 # Compare the extracted answers
                 if student_answer == ground_truth:
                     reward = 1.0
+                else:
+                    try:
+                        diff = abs(float(student_answer) - float(ground_truth))
+                        reward = max(0.0, 1 - diff / 4)          # 0.75 if off by 1
+                    except Exception:
+                        pass
+                if reward < 0.2:
+                    reward = -0.2                            # discourage wrong answers
+
             except Exception:
                 pass  # Keep reward as 0.0 if both methods fail
+                
+        
                 
         rewards.append(reward)
         if os.getenv("DEBUG_MODE") == "true":
@@ -121,7 +132,7 @@ def reasoning_steps_reward(completions, **kwargs):
     matches = [len(re.findall(pattern, content)) for content in completion_contents]
 
     # Magic number 3 to encourage 3 steps and more, otherwise partial reward
-    return [min(0.5, count / 5) for count in matches]
+    return [min(0.3, count / 10) for count in matches]
 
 def weighted_reward(completions, solution, **kwargs):
     acc = accuracy_reward(completions, solution, **kwargs)
@@ -152,6 +163,7 @@ You are provided with a synthetic fundoscopy image. Your task is twofold:
 2.	Diagnosis: Based on your analysis, determine whether the synthetic fundoscopy image show sign of disease.
 ** 0 =No diabetic retinopathy, 1= Mild non-proliferative diabetic retinopathy, 2 =Moderate non-proliferative diabetic retinopathy,3 = Severe non-proliferative diabetic retinopathy,4 =Proliferative diabetic retinopathy**
 Please structure your response into two main sections: think and answer.
+**you have to reply in english only, any other language or special words is not allowed, and focus on diagnosis**
 •	think:
 Provide a detailed chain-of-thought explanation. Each reasoning step must begin with the word "thought:" and be separated by two newline characters (\n\n). In your chain-of-thought, include:
 1. Analysis of the task and the question.
@@ -201,6 +213,7 @@ You are provided with a synthetic fundoscopy image. Your task is twofold:
 ** 0 =No diabetic retinopathy, 1= Mild non-proliferative diabetic retinopathy, 2 =Moderate non-proliferative diabetic retinopathy,3 = Severe non-proliferative diabetic retinopathy,4 =Proliferative diabetic retinopathy**. 
 one fundoscopy image may have multiple answers, but choose the most confident diagnosis. Your final diagnosis must be a single number. No other responses are allowed.
 Please structure your response into two main sections: think and answer.
+**you have to reply in english only, any other language or special words is not allowed, and focus on diagnosis**
 •	think:
 Provide a detailed chain-of-thought explanation. Each reasoning step must begin with the word "thought:" and be separated by two newline characters (\n\n). In your chain-of-thought, include:
 1. Analysis of the task and the question.
