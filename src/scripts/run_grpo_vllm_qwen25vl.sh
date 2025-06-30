@@ -44,10 +44,10 @@ CUDA_VISIBLE_DEVICES="0,1,2,3" torchrun \
     --hub_strategy every_save \
     --max_prompt_length 4096 \
     --max_completion_length 512 \
-    --learning_rate 1e-6 \
+    --learning_rate 2e-6 \
     --lr_scheduler_type cosine \
     --warmup_steps 100 \
-    --weight_decay 0.03 \
+    --weight_decay 0.00 \
     --logging_steps 1 \
     --gradient_checkpointing true \
     --attn_implementation flash_attention_2 \
@@ -61,7 +61,7 @@ CUDA_VISIBLE_DEVICES="0,1,2,3" torchrun \
     --num_train_epochs 2 \
     --max_grad_norm 1.0 \
     --run_name ${RUN_NAME} \
-    --save_steps 200 \
+    --save_steps 100 \
     --save_total_limit 2 \
     --report_to wandb \
     --temperature 0.7 \
