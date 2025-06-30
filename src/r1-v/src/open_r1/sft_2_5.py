@@ -151,7 +151,7 @@ Please ensure you adhere strictly to this format and that your final answer is o
             "content": [{"type": "text", "text": SYSTEM_PROMPT}],
         })
 
-    thinking = example.get("thinking")
+#    thinking = example.get("thinking")
     problem = example.get("problem")
     solution = example.get("solution")
     image = example.get("image")
@@ -164,7 +164,8 @@ Please ensure you adhere strictly to this format and that your final answer is o
     })
     messages.append({
         "role": "assistant",
-        "content": f"{thinking}\n\n{solution}",
+       # "content": f"{thinking}\n\n{solution}",
+        "content": f"={solution}",
     })
     
     example["messages"] = messages
