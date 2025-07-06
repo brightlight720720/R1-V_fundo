@@ -89,11 +89,11 @@ def accuracy_reward(completions, solution, **kwargs):
                 else:
                     try:
                         diff = abs(float(student_answer) - float(ground_truth))
-                        reward = max(0.0, 1 - diff / 4)          # 0.75 if off by 1
+                        reward = max(0.0, 1 - diff / 2)          # 0.75 if off by 1
                     except Exception:
                         pass
                 if reward < 0.2:
-                    reward = -0.2                            # discourage wrong answers
+                    reward = -0.1                            # discourage wrong answers
 
             except Exception:
                 pass  # Keep reward as 0.0 if both methods fail
@@ -116,7 +116,7 @@ def format_reward(completions, **kwargs):
     pattern = r"<think>.*?</think>\s*<answer>.*?</answer>"
     completion_contents = [completion[0]["content"] for completion in completions]
     matches = [re.fullmatch(pattern, content, re.DOTALL) for content in completion_contents]
-    return [ 0.3 if match else 0.0 for match in matches]
+    return [ 0.2 if match else 0.0 for match in matches]
 
 def reasoning_steps_reward(completions, **kwargs):
     r"""Reward function that checks for clear step-by-step reasoning.
@@ -132,7 +132,7 @@ def reasoning_steps_reward(completions, **kwargs):
     matches = [len(re.findall(pattern, content)) for content in completion_contents]
 
     # Magic number 3 to encourage 3 steps and more, otherwise partial reward
-    return [min(0.3, count / 10) for count in matches]
+    return [min(0.2, count / 10) for count in matches]
 
 def weighted_reward(completions, solution, **kwargs):
     acc = accuracy_reward(completions, solution, **kwargs)
