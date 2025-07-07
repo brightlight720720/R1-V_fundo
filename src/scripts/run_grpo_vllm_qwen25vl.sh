@@ -12,7 +12,8 @@ export DEBUG_MODE="true"
 export LOG_PATH="./vllm_run.txt"
 
 QWEN_PATH="/workspace/models/Qwen2.5-VL-3B-Instruct"
-#QWEN_PATH="/workspace/outputs/grpo_run"
+CKPT="/workspace/outputs/grpo_run/checkpoint-100"
+
 HF_DATASET="Leeyuyu/fundo_400"
 OUTPUT_DIR="/workspace/outputs/grpo_run"
 if [ ! -d "$OUTPUT_DIR" ]; then
@@ -37,7 +38,8 @@ CUDA_VISIBLE_DEVICES="0,1,2,3" torchrun \
     /workspace/R1-V_fundo/src/r1-v/src/open_r1/grpo_25.py \
     --use_vllm true \
     --output_dir ${OUTPUT_DIR} \
-    --model_name_or_path ${QWEN_PATH} \
+    --model_name_or_path ${CKPT} \
+    --resume_from_checkpoint ${CKPT} \
     --dataset_name ${HF_DATASET} \
     --push_to_hub true \
     --hub_model_id Leeyuyu/Qwen2.5-GRPO-fundo \
@@ -46,13 +48,13 @@ CUDA_VISIBLE_DEVICES="0,1,2,3" torchrun \
     --max_completion_length 512 \
     --learning_rate 2e-6 \
     --lr_scheduler_type cosine \
-    --warmup_steps 100 \
+    --warmup_steps 40 \
     --weight_decay 0.00 \
     --logging_steps 1 \
     --gradient_checkpointing true \
     --attn_implementation flash_attention_2 \
-    --max_steps 2000 \
-    --gradient_accumulation_steps 32 \
+    --max_steps 600 \
+    --gradient_accumulation_steps 48 \
     --per_device_train_batch_size 2 \
     --bf16 true \
     --attn_implementation flash_attention_2 \
@@ -61,10 +63,10 @@ CUDA_VISIBLE_DEVICES="0,1,2,3" torchrun \
     --num_train_epochs 2 \
     --max_grad_norm 1.0 \
     --run_name ${RUN_NAME} \
-    --save_steps 100 \
+    --save_steps 50 \
     --save_total_limit 2 \
     --report_to wandb \
-    --temperature 0.7 \
+    --temperature 0.75 \
     --num_generations 4 \
     --vllm_device "cuda:3" \
     --vllm_gpu_memory_utilization 0.85 \
