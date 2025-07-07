@@ -358,7 +358,7 @@ class Qwen2VLGRPOVLLMTrainerModified(Trainer):
                                 "max_pixels": max_pixels,
                                 "min_pixels": min_pixels,
                             }
-                            if "Qwen2-VL" in model_id or "Qwen2.5-VL" in model_id
+                            if "Qwen2-VL" in model_id or "Qwen2.5-VL" in model_id or "checkpoint" in model_id
                             else None
                         ),
                         max_model_len=args.max_prompt_length + args.max_completion_length,
