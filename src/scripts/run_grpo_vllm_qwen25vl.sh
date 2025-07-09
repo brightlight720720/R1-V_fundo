@@ -29,6 +29,10 @@ DS_CONFIG="/workspace/R1-V_fundo/src/r1-v/local_scripts/zero1_no_optimizer.json"
 # - GPU 0 for training
 # - GPU 1 for vLLM inference
 
+export VLLM_QWEN_VL_DUMMY_H=256
+export VLLM_QWEN_VL_DUMMY_W=256
+export VLLM_QWEN_VL_DUMMY_FRAMES=4
+
 CUDA_VISIBLE_DEVICES="0,1,2,3" torchrun \
     --nproc_per_node="3" \
     --nnodes="1" \
@@ -48,7 +52,7 @@ CUDA_VISIBLE_DEVICES="0,1,2,3" torchrun \
     --max_completion_length 512 \
     --learning_rate 2e-6 \
     --lr_scheduler_type cosine \
-    --warmup_steps 40 \
+    --warmup_steps 0 \
     --weight_decay 0.00 \
     --logging_steps 1 \
     --gradient_checkpointing true \
